@@ -1,5 +1,5 @@
-<h1>{{ greeting }}</h1>
-
+<h1>Based on injected LOCALE_ID</h1>
+<p>{{ 'greeting' | translate }}</p>
 <p>{{ currentDate | date : 'fullDate' }}</p>
 <p>{{ pi | number : '1.2-2'}}</p>
 
@@ -10,3 +10,35 @@
     <li><a href="?locale=nl-NL">nl-NL</a></li>
   </ul>
 </nav>
+
+<h1>Based on parameters</h1>
+<table>
+  <thead>
+    <tr>
+      <th scope="col">locale</th>
+      <th scope="col">translation</th>
+      <th scope="col">date</th>
+      <th scope="col">number</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">en-US</td>
+      <td>{{ 'greeting' | translate : 'en-US' }}</td>
+      <td>{{ currentDate | date : 'fullDate' : '' : 'en-US' }}</td>
+      <td>{{ pi | number : '1.2-2' : 'en-US'}}</td>
+    </tr>
+    <tr>
+      <td scope="row">fr-FR</td>
+      <td>{{ 'greeting' | translate : 'fr-FR' }}</td>
+      <td>{{ currentDate | date : 'fullDate' : '' : 'fr-FR' }}</td>
+      <td>{{ pi | number : '1.2-2' : 'fr-FR' }}</td>
+    </tr>
+    <tr>
+      <td scope="row">nl-NL</td>
+      <td>{{ 'greeting' | translate : 'nl-NL' }}</td>
+      <td>{{ currentDate | date : 'fullDate' : '' : 'nl-NL' }}</td>
+      <td>{{ pi | number : '1.2-2' : 'nl-NL' }}</td>
+    </tr>
+  </tbody>
+</table>

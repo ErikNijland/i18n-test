@@ -7,13 +7,15 @@ import localeFr from '@angular/common/locales/fr';
 import localeFrExtra from '@angular/common/locales/extra/fr';
 import localeNl from '@angular/common/locales/nl';
 import localeNlExtra from '@angular/common/locales/extra/nl';
+import { TranslatePipe } from './translate/translate.pipe';
 
 registerLocaleData(localeFr, 'fr', localeFrExtra);
 registerLocaleData(localeNl, 'nl', localeNlExtra);
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    TranslatePipe
   ],
   imports: [
     BrowserModule
