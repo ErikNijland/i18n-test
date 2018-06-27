@@ -10,9 +10,11 @@ export class AppComponent implements OnInit {
   constructor(private translateService: TranslateService) {}
 
   currentDate = new Date();
+  pi = Math.PI;
   greeting: string;
 
   ngOnInit() {
+    console.log(this.pi);
     this.greeting = this.translateService.sayHi();
   }
 }
