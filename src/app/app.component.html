@@ -1,4 +1,11 @@
-<h1>Hello world</h1>
+<h1>{{ greeting }}</h1>
 
 {{ currentDate | date : 'fullDate' }}
 
+<nav>
+  <ul>
+    <li><a href="?locale=en-US">en-US</a></li>
+    <li><a href="?locale=fr-FR">fr-FR</a></li>
+    <li><a href="?locale=nl-NL">nl-NL</a></li>
+  </ul>
+</nav>
