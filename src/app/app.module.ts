@@ -34,11 +34,11 @@ function setLocale() {
       return;
     }
 
-    const localeFileNameConfig = {
+    const localeIdConfig = {
       'nl-NL': 'nl',
       'fr-FR': 'fr'
     };
-    const localeId = localeFileNameConfig[locale];
+    const localeId = localeIdConfig[locale];
 
     const localeSourceCode = await fetchData(`http://localhost:4200/assets/locales/${localeId}.js`);
     const localeExtraSourceCode = await fetchData(`http://localhost:4200/assets/locales/extra/${localeId}.js`);
