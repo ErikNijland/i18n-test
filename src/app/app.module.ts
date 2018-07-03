@@ -3,11 +3,8 @@ import {APP_INITIALIZER, LOCALE_ID, NgModule} from '@angular/core';
 
 import { AppComponent } from './app.component';
 import {registerLocaleData} from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
-import localeFrExtra from '@angular/common/locales/extra/fr';
-import localeNl from '@angular/common/locales/nl';
-import localeNlExtra from '@angular/common/locales/extra/nl';
 import { TranslatePipe } from './translate/translate.pipe';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,7 +12,8 @@ import { TranslatePipe } from './translate/translate.pipe';
     TranslatePipe
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
   ],
   providers: [
     { provide: APP_INITIALIZER, useValue: setLocale, multi: true },
@@ -26,13 +24,31 @@ import { TranslatePipe } from './translate/translate.pipe';
 export class AppModule { }
 
 function setLocale() {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      registerLocaleData(localeFr, 'fr', localeFrExtra);
-      registerLocaleData(localeNl, 'nl', localeNlExtra);
+  return new Promise(async (resolve) => {
+    const locale = getLocale();
 
+    if (locale === 'en-US') {
+      // This is the default locale, the data is already available without importing anything
       resolve();
-    }, 2000);
+
+      return;
+    }
+
+    const localeFileNameConfig = {
+      'nl-NL': 'nl',
+      'fr-FR': 'fr'
+    };
+    const localeId = localeFileNameConfig[locale];
+
+    const localeSourceCode = await fetchData(`http://localhost:4200/assets/locales/${localeId}.js`);
+    const localeExtraSourceCode = await fetchData(`http://localhost:4200/assets/locales/extra/${localeId}.js`);
+
+    const localeData = getLocaleData(localeSourceCode);
+    const localeExtraData = getLocaleData(localeExtraSourceCode);
+
+    registerLocaleData(localeData, localeId, localeExtraData);
+
+    resolve();
   });
 }
 
@@ -45,4 +61,28 @@ function getLocale() {
   const isLocaleSupported = supportedLocales.includes(locale);
 
   return isLocaleSupported ? locale : defaultLocale;
+}
+
+function fetchData(url) {
+  return fetch(url).then((response) => response.text());
+}
+
+function getLocaleData(functionBody: string) {
+  const f = Function('module', 'exports', functionBody);
+
+  const module = {
+    exports: {
+      default: null
+    }
+  };
+
+  f(module, module.exports);
+
+  return module.exports.default;
+}
+
+function getLanguage(locale: string): string {
+  const [ language ] = locale.split('-');
+
+  return language;
 }
